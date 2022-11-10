@@ -101,16 +101,12 @@ async function run(){
     
          });
          app.get('/reviews',async (req,res) =>{
-          
             let query = {};
             if(req.query.service)
             {
                 query = {
-                    
                    
-                    service: req.query.service,
-                   
-                 
+                    service: req.query.service
                     
                 }
             }
