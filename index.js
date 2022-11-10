@@ -85,7 +85,7 @@ async function run(){
              res.status(403).send({message: 'unauthorized access'})
          }
             let query = {};
-            if(req.query.email)
+            if(req.query.email )
             {
                 query = {
                     
@@ -107,7 +107,9 @@ async function run(){
             {
                 query = {
                     
+                   
                     service: req.query.service,
+                   
                  
                     
                 }
@@ -117,6 +119,7 @@ async function run(){
             res.send(reviews);
     
          });
+         
 
 
      app.post('/reviewsadd',async (req,res) =>{
