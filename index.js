@@ -78,14 +78,37 @@ async function run(){
             res.send(service);
           
         });
-        app.get('/reviews',verifyJWT,async (req,res) =>{
-            
+        app.get('/reviewsadd',verifyJWT,async (req,res) =>{
+            const decoded = req.decoded;
+            console.log(decoded);
+            if(decoded.email !== req.query.email){
+             res.status(403).send({message: 'unauthorized access'})
+         }
             let query = {};
             if(req.query.email)
             {
                 query = {
                     
-                    email: req.query.email
+                    email: req.query.email,
+                 
+                    
+                }
+            }
+         
+            const cursor = reviewCollection.find(query);
+            const reviews = await cursor.toArray();
+            res.send(reviews);
+    
+         });
+         app.get('/reviews',async (req,res) =>{
+          
+            let query = {};
+            if(req.query.service)
+            {
+                query = {
+                    
+                    service: req.query.service,
+                 
                     
                 }
             }
@@ -94,23 +117,15 @@ async function run(){
             res.send(reviews);
     
          });
-         app.get('/reviews',verifyJWT, async (req,res) =>{
-          
-            const  query = {};
-            const cursor = reviewCollection.find(query);
-            const reviews = await cursor.toArray();
-            res.send(reviews);
-    
-         });
 
 
-     app.post('/reviews',async (req,res) =>{
+     app.post('/reviewsadd',async (req,res) =>{
         const review = req.body;
         const result = await reviewCollection.insertOne(review);
         res.send(result);
 
      });
-     app.patch('/reviews/:id', async (req, res) => {
+     app.patch('/reviewsadd/:id', async (req, res) => {
         const id = req.params.id;
         const status = req.body.status
         const query = { _id: ObjectId(id) }
@@ -122,7 +137,7 @@ async function run(){
         const result = await reviewCollection.updateOne(query, updatedDoc);
         res.send(result);
     })
-     app.delete('/reviews/:id', async (req, res) => {
+     app.delete('/reviewsadd/:id', async (req, res) => {
         const id = req.params.id;
         const query = { _id: ObjectId(id) };
         const result = await reviewCollection.deleteOne(query);
